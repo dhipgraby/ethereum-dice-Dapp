@@ -1,0 +1,4 @@
+/coinflip/node_modules
+/coinflip/build/
+/coinflip/.secret
+/coinflip/settings.txt

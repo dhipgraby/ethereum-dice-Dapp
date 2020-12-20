@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>CoinFlip Dapp</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="assets/js/web3.min.js"></script>
+  <script type="text/javascript" src="assets/js/abi.js"></script>
+  <script type="text/javascript" src="assets/js/contract.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+  crossorigin="anonymous" />
+</head>
+
+<body class="gamebg">
+  <div class="purpleOverlay pt-3">
+    <div class="row col-lg-12">
+      <div class="col-lg-6 col-sm-12"  align="left">
+        <div class="fundContract greyBox" onclick="openFundModal()"><p class="m-0"><b class="c-yellow">Fund Contract <i class="fas fa-download"></i></b> </p></div>
+      </div>
+      <div class="col-lg-6 col-sm-12 " align="right">
+        <div class="contractBalance greyBox c-white">Contract Balance: <span id="cBalance" class="c-yellow"></span><i class="fab fa-ethereum ml-2"></i></div>        
+      </div>
+
+    </div>
+    <div class="container" align="center">
+      <img src="assets/img/gift.gif" style="width:180px;">      
+      <h1 class="c-yellow reflex">CoinFlip Dapp <i class="fab fa-ethereum"></i></h1>
+
+      <p class="c-white pt-5">Bet Hi or low than lucky number and get 40% profit from your bets</p>
+
+      <div class="row" align="center">
+
+        <div class="col-log-6 col-md-6 col-sm-12 mb-5" >
+          <div align="center">
+            <h3 class="c-yellow mb-3">Bet - Box</h3>
+          </div>
+          <div class="greyBox pt-5 pb-5 pl-4 pr-4" align="left">
+
+            <div class="userBalance">
+              <b class="c-white">User: <span class="c-yellow" id="userAddr"></span>
+                <br>
+                <hr>
+                Balance: <span class="c-yellow" id="userBalance">0</span> <i class="fab fa-ethereum"></i></b></div>
+            <br>
+            <p>
+         
+              <label for="betAmount"><b class="c-white"><i class="fas fa-coins"></i> Amount in ethereum</b></label>
+              <input class="form-control" id="betAmount" type="number">
+            </p>
+            <div class="row" align="center">
+              <div class="col"><small class="c-white oneLineText">Bet higher than  51</small></div>
+              <div class="col"><small class="c-white oneLineText">Bet lower than  49</small></div>
+            </div>
+            <div class="col btn-group mb-3" align="center">
+              <button id="frontFace" class="btn btn-dark m-2 " onclick="placeBet(1)">
+                <b class="c-white"><span class="c-yellow"><i class="fas fa-chevron-up"></i></span> Bet High
+                  <span id="frontF"></span></b>
+                </button>
+              <button id="BackFace" class="btn btn-dark m-2" onclick="placeBet(2)">
+                <b>Bet Low <span class="c-yellow"><i class="fas fa-chevron-down"></i></span>
+                  <span id="backF"></span></b>
+                </button>
+            </div>
+            <br>
+            <h4>
+              <b class="c-white">Reward: <span class="c-yellow" id="reward">0</span> <i class="fab fa-ethereum"></i></b>
+            </h4>
+          </div>
+
+
+        </div>
+
+        <div class="col-lg-6 col-sm-12">
+          <div align="center">
+
+            <h3 class="c-yellow mb-3">Last 5 games</h3>
+            <div id="lastgames" class="m-2" align="center">
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+    <!-- END OF CONTAINER -->
+
+    <!-- Funding modal -->
+    <div class="modal" id="fundmodal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Fund Contract</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <p>
+              <label for="fundAmount"><b>Amount in Ethereum</b></label>
+              <input class="form-control" id="fundAmount" value="1" type="number">
+            </p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal">cancel</button>
+            <button id="fundBtn" onclick=" fundContract()" class="btn btn-success">Fund <span style="color:yellow"
+                id="fundingAmount"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Results and info messages -->
+    <div id="message"></div>
+
+  </div>
+  <nav class="navbar navbar-dark">
+    <a class="navbar-brand">
+      <img src="assets/img/ethlogo.png" style="width:150px;height:auto" class="d-inline-block align-top w-10">
+    </a>
+  </nav>
+</body>
+
+
+<script src="assets/js/myjs.js"></script>
+<script src="assets/js/helper.js"></script>
+
+</html>
